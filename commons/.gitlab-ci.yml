@@ -1,0 +1,35 @@
+image: gradle:6.7-jdk15
+
+stages:
+  - build
+  - staticAnalysis
+  - test
+
+variables:
+  # Disable the Gradle daemon to ensure isolated runs of the CI pipeline.
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+
+build-commons:
+  stage: build
+  script:
+    gradle lab-template:commons:assemble lab-template:commons:testClasses
+
+checkStyle-commons:
+  stage: staticAnalysis
+  script:
+    gradle lab-template:commons:checkstyleMain lab-template:commons:checkStyleTest
+  allow_failure: true
+
+
+PMD-commons:
+  stage: staticAnalysis
+  script:
+    gradle lab-template:commons:pmdMain
+  allow_failure: true
+
+test-commons:
+  stage: test
+  script:
+    - gradle lab-template:commons:test lab-template:commons:jacocoTestReport
+  coverage: /([0-9]{1,3})%/
