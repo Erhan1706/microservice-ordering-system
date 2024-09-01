@@ -31,3 +31,5 @@ gradle-app.setting
 *.idea
 .idea/*
 authentication-microservice/out/*
+.gitlab-ci.yml
+.DS_Store
